@@ -12,11 +12,33 @@ export const getAllApointments = async (req, res) => {
   }
 };
 
+
+export const getAppointmentsByDateRange = async (req, res) => {
+  const { fromDate, toDate } = req.body;
+
+ 
+  try {
+    
+    const response = await pool.query(
+      "SELECT appointment_date,completed, a.id AS appointment_id, CONCAT(d.first_name, ' ', d.last_name) AS doctor_full_name,CONCAT(p.first_name, ' ', p.last_name) AS patient_full_name FROM  appointments AS a JOIN doctors AS d ON a.doctor_dni = d.dni JOIN patients AS p ON a.patient_dni = p.dni  WHERE appointment_date >=$1 AND appointment_date <=$2 ORDER BY appointment_date DESC",[fromDate, toDate]
+    );
+
+    response.rowCount > 0
+      ? res.status(200).json({ message: "Correct Query", data: response.rows })
+      : res.status(404).json({ message: "No Data Found" });
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Error retrieving data" });
+  }
+};
+
+
 export const completeAppointment = async (req, res) => {
   const { id } = req.params;
+  console.log(id)
   try {
     await pool.query(
-      "UPDATE appointments SET completed = CASE WHEN completed = true THEN false ELSE true END WHERE id = $1",
+      "UPDATE appointments SET completed = CASE WHEN completed = false THEN true END WHERE id = $1",
       [id]
     );
     res
