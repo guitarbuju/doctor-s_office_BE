@@ -5,6 +5,8 @@ import router from "./api/Routes/patients.routes/patients.Routes.js";
 import pool from "./DB/connection.js";
 import appointmentsRouter from "./api/Routes/appointments.routes/appointments.routes.js";
 import  doctorsRouter  from "./api/Routes/doctors.routes/doctors.routes.js";
+import admissionRouter from "./api/Routes/admission.routes/admission.routes.js";
+
 
 const app = express();
 
@@ -15,6 +17,7 @@ app.use(express.json());
 app.use(router);
 app.use(appointmentsRouter);
 app.use(doctorsRouter);
+app.use(admissionRouter);
 
 const PORT = process.env.PORT;
 
