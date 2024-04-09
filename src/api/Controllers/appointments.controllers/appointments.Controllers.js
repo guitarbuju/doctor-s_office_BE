@@ -100,7 +100,7 @@ export const createAppointment = async (req, res) => {
     const response = {
       message: "Failed to create patient",
       status: "error",
-      error: error.message, // Include the error message for debugging purposes
+      error: error.message, 
     };
     res.status(500).json(response);
   }
