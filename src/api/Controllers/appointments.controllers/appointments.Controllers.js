@@ -61,7 +61,11 @@ export const completeAppointment = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error updating appointment status", error });
+      .json({
+        message: "Error updating appointment status",
+        error,
+        status: "anulled",
+      });
   }
 };
 
@@ -100,7 +104,7 @@ export const createAppointment = async (req, res) => {
     const response = {
       message: "Failed to create patient",
       status: "error",
-      error: error.message, 
+      error: error.message,
     };
     res.status(500).json(response);
   }
