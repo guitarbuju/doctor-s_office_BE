@@ -8,14 +8,13 @@ export const getAllDoctors = async (req,res)=>{
 
 
 export const createDoctor = async (req, res) => {
-  const{ partner_type, domicile,phone, email, speciality, contact_first_name, contact_last_name, contact_dni,contact_phone,id} =
-    req.body;
-    console.log(req.body)
+  const { partner_type, domicile, phone, email, speciality, contact_first_name, contact_last_name, contact_dni, contact_phone, id } = req.body;
+  console.log(req.body);
 
   try {
     await pool.query(
-      "INSERT INTO PartnershipHub (partner_type, domicile, phone, email, speciality, contact_first_name, contact_last_name, contact_dni, contact_phone,id)VALUES $1,$2,$3,$4,$5,$6,$7,$8,$9"
-      [  partner_type, domicile,phone, email, speciality, contact_first_name, contact_last_name, contact_dni,contact_phone,id]
+      "INSERT INTO PartnershipHub (partner_type, domicile, phone, email, speciality, contact_first_name, contact_last_name, contact_dni, contact_phone, id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", // Added comma between placeholders
+      [partner_type, domicile, phone, email, speciality, contact_first_name, contact_last_name, contact_dni, contact_phone, id]
     );
 
     const newDoctor = await pool.query(
