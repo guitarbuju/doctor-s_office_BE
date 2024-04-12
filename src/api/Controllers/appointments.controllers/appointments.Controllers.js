@@ -16,9 +16,9 @@ export const getAppointmentsByDateRange = async (req, res) => {
   const { fromDate, toDate } = req.body;
 
   try {
-    const response = await pool.query(
-      "SELECT appointment_date,completed, a.id AS appointment_id, CONCAT(d.first_name, ' ', d.last_name) AS doctor_full_name,CONCAT(p.first_name, ' ', p.last_name) AS patient_full_name FROM  appointments AS a JOIN doctors AS d ON a.doctor_dni = d.dni JOIN patients AS p ON a.patient_dni = p.dni  WHERE appointment_date >=$1 AND appointment_date <=$2 ORDER BY appointment_date DESC",
-      [fromDate, toDate]
+    const response = await pool.query("SELECT appointment_date,completed,a.id AS appointment_id, p.title AS doctor_full_name,CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM  appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni  WHERE appointment_date >= $1 AND appointment_date <= $2 ORDER BY appointment_date DESC"
+
+     ,[fromDate, toDate]
     );
 
     response.rowCount > 0
@@ -34,9 +34,7 @@ export const getAppointmentsByPatient = async (req, res) => {
   const { dni } = req.params;
 
   try {
-    const response = await pool.query(
-      "SELECT appointment_date,completed, a.id AS appointment_id, CONCAT(d.first_name, ' ', d.last_name) AS doctor_full_name,CONCAT(p.first_name, ' ', p.last_name) AS patient_full_name FROM  appointments AS a JOIN doctors AS d ON a.doctor_dni = d.dni JOIN patients AS p ON a.patient_dni = p.dni WHERE patient_dni = $1 ORDER BY appointment_date DESC ",
-      [dni]
+    const response = await pool.query( " SELECT appointment_date,completed,a.id AS appointment_id,p.title AS doctor_full_name,CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM   appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni WHERE patient_dni = '4646' ORDER BY appointment_date DESC"
     );
     response.rowCount > 0
       ? res.status(200).json({ message: "Correct Query", data: response.rows })
@@ -61,7 +59,11 @@ export const completeAppointment = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error updating appointment status", error });
+      .json({
+        message: "Error updating appointment status",
+        error,
+        status: "anulled",
+      });
   }
 };
 
@@ -82,13 +84,13 @@ export const createAppointment = async (req, res) => {
     );
 
     const lastRecord = await pool.query(
-      "SELECT  a.id AS appointment_id, d.first_name AS doctor_first_name, d.last_name AS doctor_last_name, p.first_name AS patient_first_name, p.last_name AS patient_last_name FROM appointments AS a JOIN doctors AS d ON a.doctor_dni = d.dni JOIN patients AS p ON a.patient_dni = p.dni ORDER BY a.date_created DESC LIMIT 1"
+      "SELECT  a.id AS appointment_id, p.title AS doctor_full_name, CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni ORDER BY a.date_created DESC LIMIT 1"
     );
 
     const response = {
       message: `Appointment Id:${lastRecord.rows[0].appointment_id} created for Patient 
       ${lastRecord.rows[0].patient_first_name} ${lastRecord.rows[0].patient_last_name}
-      with Doctor ${lastRecord.rows[0].doctor_first_name} ${lastRecord.rows[0].doctor_last_name}
+      with Doctor ${lastRecord.rows[0].doctor_full_name}
       created successfully`,
       status: "success",
       data: lastRecord.rows,
@@ -96,11 +98,11 @@ export const createAppointment = async (req, res) => {
 
     res.status(200).json(response);
   } catch (error) {
-    console.error("Error creating patient:", error);
+    console.error("Error creating appointment:", error);
     const response = {
-      message: "Failed to create patient",
+      message: "Failed to create appointment",
       status: "error",
-      error: error.message, // Include the error message for debugging purposes
+      error: error.message,
     };
     res.status(500).json(response);
   }
