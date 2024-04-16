@@ -34,8 +34,7 @@ export const getAppointmentsByPatient = async (req, res) => {
   const { dni } = req.params;
 
   try {
-    const response = await pool.query( " SELECT appointment_date,completed,a.id AS appointment_id,p.title AS doctor_full_name,CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM   appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni WHERE patient_dni = '4646' ORDER BY appointment_date DESC"
-    );
+    const response = await pool.query( "SELECT appointment_date,completed,a.id AS appointment_id,p.title AS doctor_full_name,CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM   appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni WHERE patient_dni = $1 ORDER BY appointment_date DESC",[dni]);
     response.rowCount > 0
       ? res.status(200).json({ message: "Correct Query", data: response.rows })
       : res.status(404).json({ message: "No Data Found" });
