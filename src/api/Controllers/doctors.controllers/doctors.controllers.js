@@ -18,7 +18,7 @@ export const createDoctor = async (req, res) => {
     );
 
     const newDoctor = await pool.query(
-      "SELECT * FROM PartnershipHub ORDER BY date_entered DESC LIMIT 1"
+      "SELECT * FROM PartnershipHub WHERE partner_type= 'isDoctor' ORDER BY  date_entered DESC LIMIT 1"
     );
 
     const response = {
