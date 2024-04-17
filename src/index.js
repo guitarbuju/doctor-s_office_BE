@@ -6,6 +6,7 @@ import pool from "./DB/connection.js";
 import appointmentsRouter from "./api/Routes/appointments.routes/appointments.routes.js";
 import  doctorsRouter  from "./api/Routes/doctors.routes/doctors.routes.js";
 import admissionRouter from "./api/Routes/admission.routes/admission.routes.js";
+import collaboratorRouter from "./api/Routes/collaborators.routes/collaborators.routes.js";
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(router);
 app.use(appointmentsRouter);
 app.use(doctorsRouter);
 app.use(admissionRouter);
+app.use(collaboratorRouter);
 
 const PORT = process.env.PORT;
 
