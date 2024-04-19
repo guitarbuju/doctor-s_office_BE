@@ -1,5 +1,12 @@
 import pool from "../../../DB/connection.js";
 
+export const getAllCollaborators = async (req,res)=>{
+    const response = await pool.query("SELECT * from PartnershipHub ");
+
+  res.status(200).json({ message: "success", data: response.rows });
+};
+
+
 
 export const createCollaborator = async (req, res) => {
     const { partner_type, title, domicile, phone, email, speciality, contact_first_name, contact_last_name, contact_dni, contact_phone, id } = req.body;

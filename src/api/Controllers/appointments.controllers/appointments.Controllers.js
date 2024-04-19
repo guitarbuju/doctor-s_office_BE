@@ -88,7 +88,7 @@ export const createAppointment = async (req, res) => {
 
     const response = {
       message: `Appointment Id:${lastRecord.rows[0].appointment_id} created for Patient 
-      ${lastRecord.rows[0].patient_first_name} ${lastRecord.rows[0].patient_last_name}
+      ${lastRecord.rows[0].patient_full_name}
       with Doctor ${lastRecord.rows[0].doctor_full_name}
       created successfully`,
       status: "success",

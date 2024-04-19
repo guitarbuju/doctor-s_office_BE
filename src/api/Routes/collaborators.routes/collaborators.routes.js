@@ -1,9 +1,9 @@
 import express from "express";
-import { createCollaborator } from "../../Controllers/PartnershipHub.controllers/PartnershipHub.Controllers.js";
+import { createCollaborator, getAllCollaborators } from "../../Controllers/PartnershipHub.controllers/PartnershipHub.Controllers.js";
 
 const collaboratorRouter =express.Router();
 
-// doctorsRouter.get('/collaborators',getAllDoctors);
+collaboratorRouter.get('/collaborators',getAllCollaborators)
 collaboratorRouter.post('/collaborators',createCollaborator);
 
 
