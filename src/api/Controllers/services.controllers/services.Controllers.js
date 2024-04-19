@@ -28,7 +28,7 @@ export const createService = async (req, res) => {
     );
 
     const response = {
-      message: "Service created",
+      message: "Service created successfully.",
       data: {
         title: lastRecord.rows[0].title,
         category: lastRecord.rows[0].category,
