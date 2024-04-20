@@ -24,12 +24,12 @@ export const createAdmission = async (req, res) => {
     ]);
 
     const queryText = `
-            INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created)
-            SELECT appointment_date, false as completed, a.id AS appointment_id, CONCAT(d.first_name, ' ', d.last_name) AS doctor_full_name, CONCAT(p.first_name, ' ', p.last_name) AS patient_full_name, CURRENT_TIMESTAMP AS date_created
-            FROM appointments AS a
-            JOIN doctors AS d ON a.doctor_dni = d.dni
-            JOIN patients AS p ON a.patient_dni = p.dni
-            WHERE a.id = $1
+    INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created)
+    SELECT appointment_date, false as completed, a.id AS appointment_id, title AS doctor_full_name, CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name, CURRENT_TIMESTAMP AS date_created
+    FROM appointments AS a
+    JOIN partnershipHub AS p ON a.doctor_dni = p.contact_dni
+    JOIN patients AS p1 ON a.patient_dni = p1.dni
+    WHERE a.id = $1
         `;
     await pool.query(queryText, [id]);
 
@@ -40,7 +40,7 @@ export const createAdmission = async (req, res) => {
       .json({ message: "Admission created successfully.", status: "admitted" });
   } catch (error) {
     // Rollback the transaction if an error occurs
-    await pool.query("ROLLBACK");
+    // await pool.query("ROLLBACK");
     console.error(error);
     res.status(500).json({ message: "Error creating admission." });
   }
