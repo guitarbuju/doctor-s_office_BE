@@ -16,7 +16,7 @@ export const getAppointmentsByDateRange = async (req, res) => {
   const { fromDate, toDate } = req.body;
 
   try {
-    const response = await pool.query("SELECT appointment_date,completed,a.id AS appointment_id, p.title AS doctor_full_name,CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM  appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni  WHERE appointment_date >= $1 AND appointment_date <= $2 ORDER BY appointment_date DESC"
+    const response = await pool.query("SELECT appointment_date,completed,a.id AS appointment_id,a.patient_dni , p.title AS doctor_full_name, CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name FROM  appointments AS a JOIN partnershiphub AS p ON a.doctor_dni = p.contact_dni JOIN patients AS p1 ON a.patient_dni = p1.dni  WHERE appointment_date >= $1 AND appointment_date <= $2 ORDER BY appointment_date DESC"
 
      ,[fromDate, toDate]
     );
