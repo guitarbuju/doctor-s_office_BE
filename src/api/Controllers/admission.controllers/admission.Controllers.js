@@ -11,6 +11,17 @@ export const getAllAdmissions = async (req, res) => {
     res.status(500).json({ message: "error retrieving data" });
   }
 };
+export const getPendingAdmissions = async (req, res) => {
+  try {
+    const response = await pool.query("SELECT * FROM admissions where completed = false");
+
+    response.rowCount > 0
+      ? res.status(200).json({ message: "Correct Query", data: response.rows })
+      : res.status(404).json({ message: "No Data Found" });
+  } catch (error) {
+    res.status(500).json({ message: "error retrieving data" });
+  }
+};
 
 export const createAdmission = async (req, res) => {
   const { id } = req.params;

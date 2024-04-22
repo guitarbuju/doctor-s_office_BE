@@ -8,6 +8,7 @@ import  doctorsRouter  from "./api/Routes/doctors.routes/doctors.routes.js";
 import admissionRouter from "./api/Routes/admission.routes/admission.routes.js";
 import collaboratorRouter from "./api/Routes/collaborators.routes/collaborators.routes.js";
 import serviceRouter from "./api/Routes/services.routes/services.routes.js";
+import chargeRouter from "./api/Routes/charges.routes/charges.routes.js";
 
 
 
@@ -22,7 +23,8 @@ app.use(appointmentsRouter);
 app.use(doctorsRouter);
 app.use(admissionRouter);
 app.use(collaboratorRouter);
-app.use(serviceRouter)
+app.use(serviceRouter);
+app.use(chargeRouter);
 
 const PORT = process.env.PORT;
 
