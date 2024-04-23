@@ -61,3 +61,30 @@ export const insertCharge = async (req, res) => {
       return res.status(500).json({ message: "Error inserting charge", error: error.message });
     }
   };
+  
+  
+  export const insertChargeLoad = async (req, res) => {
+    const dinamicInputs = req.body;
+    console.log(dinamicInputs);
+  
+    try {
+      const script = "INSERT INTO charges (admission_id, service_id, amount, collaborator) VALUES ($1, $2, $3, $4)";
+     
+      for (const element of dinamicInputs) {
+     
+        await pool.query(script, [element.id, element.serviceId, element.num, element.value]);
+      }
+  
+      const sendBack = await pool.query("SELECT * FROM charges WHERE admission_id = $1", [dinamicInputs[0].id]);
+
+      
+      return res.status(200).json({
+        message: "Charge inserted successfully",
+        data:sendBack.rows
+      });
+    } catch (error) {
+      // Return error response
+      return res.status(500).json({ message: "Error inserting charge", error: error.message });
+    }
+  };
+  
