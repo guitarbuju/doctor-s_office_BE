@@ -1,7 +1,7 @@
 import pool from "../../../DB/connection.js";
 
 export const getAllCollaborators = async (req,res)=>{
-    const response = await pool.query("SELECT * from PartnershipHub ");
+    const response = await pool.query("SELECT id,title from PartnershipHub ");
 
   res.status(200).json({ message: "success", data: response.rows });
 };
