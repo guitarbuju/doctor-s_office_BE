@@ -13,8 +13,8 @@ export const getAllCharges = async (req, res) => {
 };
 
 export const insertCharge = async (req, res) => {
-    const { admissionId, serviceId, num } = req.body;
-    console.log({ admissionId, serviceId, num });
+    const { admissionId, serviceId, num, collaborator} = req.body;
+    console.log({ admissionId, serviceId, num, collaborator });
   
     try {
       // Check if admission is incomplete
@@ -31,8 +31,8 @@ export const insertCharge = async (req, res) => {
       if (!admissionCheck.rows[0].completed) {
       
         const response = await pool.query(
-          "INSERT INTO charges (admission_id, service_id, amount) VALUES ($1, $2, $3)",
-          [admissionId, serviceId, num]
+          "INSERT INTO charges (admission_id, service_id, amount, collaborator) VALUES ($1, $2, $3, $4)",
+          [admissionId, serviceId, num, collaborator]
         );
   
       

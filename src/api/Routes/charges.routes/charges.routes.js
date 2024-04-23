@@ -5,6 +5,7 @@ import { getAllCharges, insertCharge } from "../../Controllers/charges.controlle
 const chargeRouter = express.Router();
 
 chargeRouter.get('/charges', getAllCharges)
+chargeRouter.get('/charges/pending', getAllCharges)
 chargeRouter.post('/charges', insertCharge)
 
 export default chargeRouter;
