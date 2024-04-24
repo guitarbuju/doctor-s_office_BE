@@ -65,7 +65,6 @@ export const insertCharge = async (req, res) => {
   
   export const insertChargeLoad = async (req, res) => {
     const dinamicInputs = req.body;
-    console.log(dinamicInputs);
   
     try {
       const script = "INSERT INTO charges (admission_id, service_id, amount, collaborator) VALUES ($1, $2, $3, $4)";

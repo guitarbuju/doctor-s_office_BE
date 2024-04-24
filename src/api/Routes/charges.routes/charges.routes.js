@@ -6,7 +6,7 @@ const chargeRouter = express.Router();
 
 chargeRouter.get('/charges', getAllCharges)
 chargeRouter.get('/charges/pending', getAllCharges)
-chargeRouter.post('/charges', insertCharge)
-chargeRouter.post('/charges/trial', insertChargeLoad)
+// chargeRouter.post('/charges', insertCharge)
+chargeRouter.post('/charges', insertChargeLoad)
 
 export default chargeRouter;
