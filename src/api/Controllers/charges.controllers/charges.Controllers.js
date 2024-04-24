@@ -9,8 +9,13 @@ const { id }= req.params;
         "SELECT admission_id,charge_id,amount, services.price AS price,total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
         [id]
       );
+
+    const total = await pool.query (
+       " SELECT SUM(total) AS total_sum FROM charges  WHERE admission_id = $1 GROUP BY admission_id ",[id]);
+
+
     response.rowCount > 0
-      ? res.status(200).json({ message: "Correct Query", data: response.rows })
+      ? res.status(200).json({ message: "Correct Query", data: response.rows, total:total.rows })
       : res.status(404).json({ message: "No Data Found" });
   } catch (error) {
     res.status(500).json({ message: "error retrieving data" });
