@@ -1,11 +1,11 @@
 import express from "express";
 
-import { getAllCharges, insertCharge } from "../../Controllers/charges.controllers/charges.Controllers.js";
+import {  deleteOneCharge, getChargesForOneInvoice, insertChargeLoad } from "../../Controllers/charges.controllers/charges.Controllers.js";
 
 const chargeRouter = express.Router();
 
-chargeRouter.get('/charges', getAllCharges)
-chargeRouter.get('/charges/pending', getAllCharges)
-chargeRouter.post('/charges', insertCharge)
+chargeRouter.get('/charges/:id', getChargesForOneInvoice)
+chargeRouter.post('/charges', insertChargeLoad)
+chargeRouter.delete('/charges/:id', deleteOneCharge)
 
 export default chargeRouter;
