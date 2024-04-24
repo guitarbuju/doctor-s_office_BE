@@ -74,7 +74,7 @@ export const deleteOneCharge = async (req, res) => {
     );
 
     const message = checkup.rowCount === 0 ? "Charge deleted successfully" : "Charge not found";
-    const status = checkup.rowCount === 0 ? 404 : 200;
+    const status = checkup.rowCount === 0 ? 200 : 404;
     return res.status(status).json({ message });
   
 } catch (error) {
