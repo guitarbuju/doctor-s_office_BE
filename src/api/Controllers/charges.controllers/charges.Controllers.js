@@ -28,25 +28,19 @@ export const getChargesForOneInvoice = async (req, res) => {
   }
 };
 
-export const insertChargeLoad = async (req, res) => {
-  const dinamicInputs = req.body;
-
+export const insertCharge = async (req, res) => {
+  const { admissionId, serviceId, num, id} = req.body;
+console.log(req.body)
   try {
     const script =
       "INSERT INTO charges (admission_id, service_id, amount, collaborator) VALUES ($1, $2, $3, $4)";
 
-    for (const element of dinamicInputs) {
-      await pool.query(script, [
-        element.id,
-        element.serviceId,
-        element.num,
-        element.value,
-      ]);
-    }
+    
+    const insertCharge=  await pool.query(script, [ admissionId, serviceId, num, id]);
 
     const sendBack = await pool.query(
       "SELECT admission_id,charge_id,amount, services.price AS price,total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
-      [dinamicInputs[0].id]
+      [admissionId]
     );
 
     return res.status(200).json({
