@@ -5,7 +5,7 @@ export const getChargesForOneInvoice = async (req, res) => {
 
   try {
     const response = await pool.query(
-      "SELECT admission_id,charge_id,amount, services.price AS price,total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
+      "SELECT admission_id,charge_id,amount,date_created, services.price AS price,total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
       [id]
     );
 
@@ -33,20 +33,22 @@ export const insertCharge = async (req, res) => {
 console.log(req.body)
   try {
     const script =
-      "INSERT INTO charges (admission_id, service_id, amount, collaborator) VALUES ($1, $2, $3, $4)";
+    "INSERT INTO charges (admission_id, service_id, amount, collaborator, date_created) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)";
 
     
     const insertCharge=  await pool.query(script, [ admissionId, serviceId, num, id]);
 
     const sendBack = await pool.query(
-      "SELECT admission_id,charge_id,amount, services.price AS price,total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
-      [admissionId]
-    );
+        "SELECT admission_id, charge_id, amount, date_created, services.price AS price, total, services.title AS service_title, p.title AS doctor FROM charges JOIN services ON charges.service_id = services.id JOIN partnershiphub AS p ON charges.collaborator = p.id WHERE admission_id = $1",
+        [admissionId]
+      );
+    
+      console.log(sendBack)
 
-    return res.status(200).json({
-      message: "Charge inserted successfully",
-      data: sendBack.rows,
-    });
+      return res.status(200).json({
+        message: "Charge inserted successfully",
+        data: sendBack.rows,
+      });
   } catch (error) {
     // Return error response
     return res
