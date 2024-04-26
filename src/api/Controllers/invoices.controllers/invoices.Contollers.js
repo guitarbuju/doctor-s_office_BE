@@ -43,9 +43,7 @@ export const invoiceMaker = async (req, res) => {
  WHERE c.admission_id =$1`,
       [id]
     );
-
-    console.log(sendBack);
-
+   
     sendBack.rowCount > 0
       ? res
           .status(200)
