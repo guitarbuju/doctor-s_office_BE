@@ -3,7 +3,10 @@ import pool from "../../../DB/connection.js";
 export const invoiceMaker = async (req, res) => {
   const { id } = req.params;
 
-  const checkExistence = await pool.query("SELECT invoice_id FROM invoices WHERE admission_id = $1",[id]);
+  const checkExistence = await pool.query(
+    "SELECT invoice_id FROM invoices WHERE admission_id = $1",
+    [id]
+  );
 
   if (checkExistence.rows.length > 0) {
     return res.status(409).json({ message: "Already exists in DB" });
@@ -48,33 +51,27 @@ export const invoiceMaker = async (req, res) => {
  WHERE c.admission_id =$1`,
       [id]
     );
-   
+
     sendBack.rowCount > 0
-      ? res
-          .status(200)
-          .json({
-            message: "Invoice created succesfully",
-            data: sendBack.rows,
-          })
+      ? res.status(200).json({
+          message: "Invoice created succesfully",
+          data: sendBack.rows,
+        })
       : res.status(404).json({ message: "Couldn't create invoice" });
-    
   } catch (error) {
     // Return error response
     return res
       .status(500)
       .json({ message: "Error creating invoice", error: error.message });
   }
- 
 };
 
+export const InvoiceList = async (req, res) => {
+  const status = req.params.status;
 
-export const InvoiceList = async(req,res)=>{
-
-    const status = req.params.status;
-
-    try{
-    const response = await pool.query( 
-    `SELECT     
+  try {
+    const response = await pool.query(
+      `SELECT     
     i.invoice_id, 
     i.invoice_date,
     i.status,
@@ -92,20 +89,44 @@ JOIN
     charges AS c ON i.admission_id = c.admission_id
 JOIN 
     admissions AS a ON c.admission_id = a.id
-WHERE i.status = $1`,[status]);
-    
+WHERE i.status = $1`,
+      [status]
+    );
+
     response.rowCount > 0
-    ? res
-        .status(200)
-        .json({
+      ? res.status(200).json({
           message: "Invoice List send succesfully",
           data: response.rows,
         })
-    : res.status(404).json({ message: "Couldn't create invoice" });
+      : res.status(404).json({ message: "Couldn't create invoice" });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-    }catch(error){
-        console.error(error);
-    };
+export const anullInvoice = async (req, res) => {
+  const { invoice_id } = req.params;
+  console.log(invoice_id)
 
+  try {
+    const nullInvoice = await pool.query(
+      `
+        UPDATE invoices SET status = 'annulled' WHERE invoice_id = $1`,
+      [invoice_id]
+    );
 
-}
+    const sendBack = await pool.query(
+      `SELECT * FROM invoices WHERE invoice_id = $1 AND status = 'annulled'`,
+      [invoice_id]
+    );
+
+   sendBack.rowCount > 0
+      ? res.status(200).json({
+          message: "Invoice annulled succesfully",
+          data: sendBack.rows,
+        })
+      : res.status(404).json({ message: "Couldn't annull invoice" });
+  } catch (error) {
+    console.error(error);
+  }
+};
