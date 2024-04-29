@@ -3,6 +3,11 @@ import pool from "../../../DB/connection.js";
 export const invoiceMaker = async (req, res) => {
   const { id } = req.params;
 
+  const checkExistence = await pool.query("SELECT invoice_id FROM invoices WHERE admission_id = $1",[id]);
+
+  if (checkExistence.rows.length > 0) {
+    return res.status(409).json({ message: "Already exists in DB" });
+  }
   try {
     const generateInvoice = await pool.query(
       `INSERT INTO invoices (admission_id, invoice_date)
@@ -52,10 +57,55 @@ export const invoiceMaker = async (req, res) => {
             data: sendBack.rows,
           })
       : res.status(404).json({ message: "Couldn't create invoice" });
+    
   } catch (error) {
     // Return error response
     return res
       .status(500)
       .json({ message: "Error creating invoice", error: error.message });
   }
+ 
 };
+
+
+export const InvoiceList = async(req,res)=>{
+
+    const status = req.params.status;
+
+    try{
+    const response = await pool.query( 
+    `SELECT     
+    i.invoice_id, 
+    i.invoice_date,
+    i.status,
+    c.admission_id, 
+    a.doctor_full_name,
+    a.patient_full_name,
+    (
+        SELECT SUM(c2.total) 
+        FROM charges AS c2 
+        WHERE c2.admission_id = i.admission_id
+    ) AS invoice_total
+FROM 
+    invoices AS i
+JOIN 
+    charges AS c ON i.admission_id = c.admission_id
+JOIN 
+    admissions AS a ON c.admission_id = a.id
+WHERE i.status = $1`,[status]);
+    
+    response.rowCount > 0
+    ? res
+        .status(200)
+        .json({
+          message: "Invoice List send succesfully",
+          data: response.rows,
+        })
+    : res.status(404).json({ message: "Couldn't create invoice" });
+
+    }catch(error){
+        console.error(error);
+    };
+
+
+}

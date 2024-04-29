@@ -30,7 +30,7 @@ export const getChargesForOneInvoice = async (req, res) => {
 
 export const insertCharge = async (req, res) => {
   const { admissionId, serviceId, num, id} = req.body;
-console.log(req.body)
+
   try {
     const script =
     "INSERT INTO charges (admission_id, service_id, amount, collaborator, date_created) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)";
@@ -43,7 +43,7 @@ console.log(req.body)
         [admissionId]
       );
     
-      console.log(sendBack)
+     
 
       return res.status(200).json({
         message: "Charge inserted successfully",
