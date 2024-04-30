@@ -106,7 +106,7 @@ WHERE i.status = $1`,
 
 export const anullInvoice = async (req, res) => {
   const { invoice_id } = req.params;
-  console.log(invoice_id)
+  
 
   try {
     const nullInvoice = await pool.query(
