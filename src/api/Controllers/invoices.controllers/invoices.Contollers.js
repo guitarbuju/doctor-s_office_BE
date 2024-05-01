@@ -106,7 +106,6 @@ WHERE i.status = $1`,
 
 export const anullInvoice = async (req, res) => {
   const { invoice_id } = req.params;
-  
 
   try {
     const nullInvoice = await pool.query(
@@ -120,12 +119,57 @@ export const anullInvoice = async (req, res) => {
       [invoice_id]
     );
 
-   sendBack.rowCount > 0
+    sendBack.rowCount > 0
       ? res.status(200).json({
           message: "Invoice annulled succesfully",
           data: sendBack.rows,
         })
       : res.status(404).json({ message: "Couldn't annull invoice" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getOneInvoice = async (req, res) => {
+  
+  const { invoice_id } = req.params;
+  
+  try {
+    const sendBack = await pool.query(
+      `SELECT 
+      i.invoice_id, 
+      i.invoice_date,
+      i.status,
+      c.admission_id, 
+      c.date_created AS charge_date, 
+      c.amount,
+      c.total,
+      a.doctor_full_name,
+      s.title,
+      s.price,
+      a.patient_full_name,
+      (
+          SELECT SUM(c2.total) 
+          FROM charges AS c2 
+          WHERE c2.admission_id = i.admission_id
+      ) AS invoice_total
+  FROM 
+      invoices AS i
+  JOIN 
+      charges AS c ON i.admission_id = c.admission_id
+  JOIN 
+      admissions AS a ON c.admission_id = a.id
+  JOIN 
+      services AS s ON c.service_id = s.id
+  WHERE i.invoice_id =$1`,[invoice_id]);
+
+
+    sendBack.rowCount > 0
+      ? res.status(200).json({
+          message: "Selected invoice sent succesfully",
+          data: sendBack.rows,
+        })
+      : res.status(404).json({ message: "Couldn't send selected invoice" });
   } catch (error) {
     console.error(error);
   }
