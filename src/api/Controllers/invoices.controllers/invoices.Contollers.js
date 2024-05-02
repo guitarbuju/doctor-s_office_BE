@@ -98,7 +98,7 @@ WHERE i.status = $1`,
           message: "Invoice List send succesfully",
           data: response.rows,
         })
-      : res.status(404).json({ message: "Couldn't create invoice" });
+      : res.status(200).json({ message: "No data from selected List" });
   } catch (error) {
     console.error(error);
   }
