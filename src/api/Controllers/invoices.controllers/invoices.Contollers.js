@@ -114,6 +114,15 @@ export const anullInvoice = async (req, res) => {
       [invoice_id]
     );
 
+    const reOpenAdmission = await pool.query(`
+    UPDATE admissions
+    SET completed = false
+    FROM invoices
+    WHERE admissions.id = invoices.admission_id
+      AND invoices.invoice_id = $1;
+  `, [invoice_id]);
+  
+
     const sendBack = await pool.query(
       `SELECT * FROM invoices WHERE invoice_id = $1 AND status = 'annulled'`,
       [invoice_id]
