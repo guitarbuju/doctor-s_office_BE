@@ -3,14 +3,7 @@ import pool from "../../../DB/connection.js";
 export const invoiceMaker = async (req, res) => {
   const { id } = req.params;
 
-  const checkExistence = await pool.query(
-    "SELECT invoice_id FROM invoices WHERE admission_id = $1",
-    [id]
-  );
-
-  if (checkExistence.rows.length > 0) {
-    return res.status(409).json({ message: "Already exists in DB" });
-  }
+  
   try {
     const generateInvoice = await pool.query(
       `INSERT INTO invoices (admission_id, invoice_date)
