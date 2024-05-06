@@ -14,18 +14,14 @@ export const dataForDiscount = async (req, res )=>{
           a.patient_full_name,
           a.dni,
           SUM(c.total) AS invoice_total,
-          COALESCE(SUM(d.discount)::money, 0::money) AS total_discounts,
-          SUM(c.total)::money - COALESCE(SUM(d.discount)::money, 0::money) AS net_amount
+          (SELECT SUM(discount) FROM discounts WHERE admission_id = c.admission_id) AS total_discounts,
+          SUM(c.total) - (SELECT SUM(discount) FROM discounts WHERE admission_id = c.admission_id) AS net_amount
       FROM 
           invoices AS i
       JOIN 
           charges AS c ON i.admission_id = c.admission_id
       JOIN 
           admissions AS a ON c.admission_id = a.id
-      LEFT JOIN
-          (SELECT admission_id, SUM(discount) AS discount FROM discounts GROUP BY admission_id) AS d
-      ON
-          c.admission_id = d.admission_id
       WHERE 
           a.dni = $1
           AND i.status = 'pending'
@@ -33,7 +29,8 @@ export const dataForDiscount = async (req, res )=>{
           i.invoice_id, 
           c.admission_id,  
           a.patient_full_name,
-          a.dni;
+          a.dni
+      
       `
         ,
             [dni]
