@@ -11,6 +11,7 @@ import serviceRouter from "./api/Routes/services.routes/services.routes.js";
 import chargeRouter from "./api/Routes/charges.routes/charges.routes.js";
 import { invoiceMaker } from "./api/Controllers/invoices.controllers/invoices.Contollers.js";
 import invoiceRouter from "./api/Routes/invoices.routes/invoices.routes.js";
+import discountRouter from "./api/Routes/payments.routes/discounts/discounts.routes.js";
 
 
 
@@ -28,6 +29,7 @@ app.use(collaboratorRouter);
 app.use(serviceRouter);
 app.use(chargeRouter);
 app.use(invoiceRouter);
+app.use(discountRouter);
 
 const PORT = process.env.PORT;
 
