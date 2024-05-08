@@ -12,6 +12,7 @@ import chargeRouter from "./api/Routes/charges.routes/charges.routes.js";
 import { invoiceMaker } from "./api/Controllers/invoices.controllers/invoices.Contollers.js";
 import invoiceRouter from "./api/Routes/invoices.routes/invoices.routes.js";
 import discountRouter from "./api/Routes/payments.routes/discounts/discounts.routes.js";
+import paymentRouter from "./api/Routes/payments.routes/creditCards/creditCards.routes.js";
 
 
 
@@ -30,17 +31,18 @@ app.use(serviceRouter);
 app.use(chargeRouter);
 app.use(invoiceRouter);
 app.use(discountRouter);
+app.use(paymentRouter);
 
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  // Log connection successful here
+  
   pool.connect((err, client, release) => {
     if (err) {
       return console.error("Error acquiring client", err.stack);
     }
     console.log("PostgreSQL DB Connection successful");
-    release(); // Release the client back to the pool
+    release(); 
   });
 });
