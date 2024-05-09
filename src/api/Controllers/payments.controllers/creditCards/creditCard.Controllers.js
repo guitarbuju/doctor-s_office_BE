@@ -1,14 +1,13 @@
 import pool from "../../../../DB/connection.js";
 
 
-export const dataForDiscount = async (req, res )=>{
+export const dataForPayment = async (req, res )=>{
 
     const { dni }= req.params;
 
     try {
 
-        const getDataForDiscount = await pool.query(
-      
+        const getDataForPayment = await pool.query(
           `SELECT 
           i.invoice_id, 
           i.invoice_date,
@@ -43,20 +42,20 @@ export const dataForDiscount = async (req, res )=>{
             [dni]
           );
 
-          console.log(getDataForDiscount.rows);
+          console.log(getDataForPayment.rows);
 
     
-          getDataForDiscount.rowCount > 0
+          getDataForPayment.rowCount > 0
           ? res.status(200).json({
-              message:`Data for discount success`,
-              data: getDataForDiscount.rows,
+              message:`Data payment success`,
+              data: getDataForPayment.rows,
             })
-          : res.status(404).json({ message: "Couldn't find data for discount" });
+          : res.status(404).json({ message: "Couldn't find data for payment" });
       } catch (error) {
         // Return error response
         return res
           .status(500)
-          .json({ message: "Error finding Discount data", error: error.message });
+          .json({ message: "Error finding payment data", error: error.message });
       }
 
 
@@ -64,36 +63,38 @@ export const dataForDiscount = async (req, res )=>{
 
 
 
-export const discountVoucherCreator = async (req, res) => {
-  const { admission_id, discount } = req.body;
+export const paymentVoucherCreator = async (req, res) => {
+  const { admission_id, payment, card_holder, card_number, cvv, expiration_date, card_issuer} = req.body;
+
 
  try{
-      const generateDiscount = await pool.query(
-        `INSERT INTO discounts (admission_id, discount,date_entered) 
-              VALUES ($1,$2,CURRENT_TIMESTAMP)`,
-        [admission_id, discount]
+      const generatePayment = await pool.query(
+        `INSERT INTO payments (admission_id, payment,date_entered,
+          card_holder, card_number, cvv, expiration_date, card_issuer) 
+              VALUES ($1,$2,CURRENT_TIMESTAMP,$3,$4,$5,$6,$7)`,
+        [admission_id, payment, card_holder, card_number, cvv, expiration_date, card_issuer]
       );
 
       const sendBack = await pool.query
       (`SELECT * FROM 
-      discounts 
+      payments 
       GROUP BY date_entered ,
       admission_id,
-      discounts.id
+      payments.id
       ORDER BY date_entered DESC
       LIMIT 1
       `)
 
     sendBack.rowCount > 0
       ? res.status(200).json({
-          message: "Discount Voucher created succesfully",
+          message: "Payment Voucher created succesfully",
           data: sendBack.rows,
         })
-      : res.status(404).json({ message: "Couldn't create Discount Voucher" });
+      : res.status(404).json({ message: "Couldn't create Payment Voucher" });
   } catch (error) {
     // Return error response
     return res
       .status(500)
-      .json({ message: "Error creating Discount Voucher", error: error.message });
+      .json({ message: "Error creating Payment Voucher", error: error.message });
   }
 };
