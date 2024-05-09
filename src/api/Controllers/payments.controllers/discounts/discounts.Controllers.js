@@ -11,6 +11,7 @@ export const dataForDiscount = async (req, res )=>{
       
           `SELECT 
           i.invoice_id, 
+          i.invoice_date,
           c.admission_id,  
           a.patient_full_name,
           a.dni,
@@ -31,6 +32,7 @@ export const dataForDiscount = async (req, res )=>{
           AND i.status = 'pending'
       GROUP BY 
           i.invoice_id, 
+          i.invoice_date,
           c.admission_id,  
           a.patient_full_name,
           a.dni;

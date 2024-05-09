@@ -10,6 +10,7 @@ export const dataForPayment = async (req, res )=>{
         const getDataForPayment = await pool.query(
           `SELECT 
           i.invoice_id, 
+          i.invoice_date,
           c.admission_id,  
           a.patient_full_name,
           a.dni,
@@ -30,6 +31,7 @@ export const dataForPayment = async (req, res )=>{
           AND i.status = 'pending'
       GROUP BY 
           i.invoice_id, 
+          i.invoice_date,
           c.admission_id,  
           a.patient_full_name,
           a.dni;
