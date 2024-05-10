@@ -1,4 +1,5 @@
 import pool from "../../../DB/connection.js";
+import { updateInvoiceStatus } from "../../utils/updateStatus.js";
 
 export const invoiceMaker = async (req, res) => {
   const { id } = req.params;
@@ -61,6 +62,8 @@ export const invoiceMaker = async (req, res) => {
 
 export const InvoiceList = async (req, res) => {
   const status = req.params.status;
+
+  updateInvoiceStatus()
 
   try {
     const response = await pool.query(
