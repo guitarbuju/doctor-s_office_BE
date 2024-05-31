@@ -35,8 +35,8 @@ export const createAdmission = async (req, res) => {
     ]);
 
     const queryText = `
-    INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created)
-    SELECT appointment_date, false as completed, a.id AS appointment_id, title AS doctor_full_name, CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name, CURRENT_TIMESTAMP AS date_created
+    INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created,dni)
+    SELECT appointment_date, false as completed, a.id AS appointment_id, title AS doctor_full_name, CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name, CURRENT_TIMESTAMP AS date_created,patient_dni
     FROM appointments AS a
     JOIN partnershipHub AS p ON a.doctor_dni = p.contact_dni
     JOIN patients AS p1 ON a.patient_dni = p1.dni
