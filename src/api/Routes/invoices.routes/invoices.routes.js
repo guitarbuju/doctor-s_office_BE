@@ -5,7 +5,7 @@ const invoiceRouter = express.Router();
 
 
 invoiceRouter.post('/invoices/:id', invoiceMaker);
-invoiceRouter.get('/invoices/:status', InvoiceList);
+invoiceRouter.get('/invoices', InvoiceList);
 invoiceRouter.get('/invoices/getOne/:invoice_id', getOneInvoice);
 invoiceRouter.post('/invoices/annull/:invoice_id', anullInvoice);
 
