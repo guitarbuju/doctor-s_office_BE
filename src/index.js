@@ -9,10 +9,11 @@ import admissionRouter from "./api/Routes/admission.routes/admission.routes.js";
 import collaboratorRouter from "./api/Routes/collaborators.routes/collaborators.routes.js";
 import serviceRouter from "./api/Routes/services.routes/services.routes.js";
 import chargeRouter from "./api/Routes/charges.routes/charges.routes.js";
-import { invoiceMaker } from "./api/Controllers/invoices.controllers/invoices.Contollers.js";
+// import { invoiceMaker } from "./api/Controllers/invoices.controllers/invoices.Contollers.js";
 import invoiceRouter from "./api/Routes/invoices.routes/invoices.routes.js";
 import discountRouter from "./api/Routes/payments.routes/discounts/discounts.routes.js";
 import paymentRouter from "./api/Routes/payments.routes/creditCards/creditCards.routes.js";
+import authorizationRouter from "./api/Routes/auth.routes/authorization.routes.js";
 
 
 
@@ -32,6 +33,7 @@ app.use(chargeRouter);
 app.use(invoiceRouter);
 app.use(discountRouter);
 app.use(paymentRouter);
+app.use(authorizationRouter);
 
 const PORT = process.env.PORT;
 
