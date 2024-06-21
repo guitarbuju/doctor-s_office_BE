@@ -102,6 +102,8 @@ export const invoiceMaker = async (req, res) => {
 export const anullInvoice = async (req, res) => {
   const { invoice_id } = req.params;
 
+
+
   try {
     const nullInvoice = await pool.query(
       `
@@ -184,6 +186,8 @@ export const getOneInvoice = async (req, res) => {
 export const InvoiceList = async (req, res) => {
  
   const { status, from, to } = req.query;
+
+  updateInvoiceStatus()
 
   const query = `
       SELECT     
