@@ -155,6 +155,7 @@ export const getOneInvoice = async (req, res) => {
       s.title,
       s.price,
       a.patient_full_name,
+      a.dni,
       (
           SELECT SUM(c2.total) 
           FROM charges AS c2 
