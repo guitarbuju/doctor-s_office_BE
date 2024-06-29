@@ -60,6 +60,65 @@ export const dataForPayment = async (req, res )=>{
 
 
 }
+export const dataForPaymentByInvoice = async (req, res )=>{
+
+    const { invoice_id }= req.params;
+
+    try {
+
+        const getDataForPayment = await pool.query(
+          `SELECT 
+          i.invoice_id, 
+          i.invoice_date,
+          c.admission_id,  
+          a.patient_full_name,
+          a.dni,
+          SUM(c.total) AS invoice_total,
+        COALESCE((SELECT SUM(payment) FROM payments WHERE admission_id = c.admission_id), 0) AS total_payments,
+          COALESCE((SELECT SUM(discount) FROM discounts WHERE admission_id = c.admission_id), 0) AS total_discounts,
+          SUM(c.total) - COALESCE((SELECT SUM(discount) FROM discounts WHERE admission_id = c.admission_id), 0) - 
+          COALESCE((SELECT SUM(payment) FROM payments WHERE admission_id = c.admission_id), 0) AS net_amount
+          
+      FROM 
+          invoices AS i
+      JOIN 
+          charges AS c ON i.admission_id = c.admission_id
+      JOIN 
+          admissions AS a ON c.admission_id = a.id
+      WHERE 
+          i.invoice_id = $1
+          AND i.status = 'pending'
+      GROUP BY 
+          i.invoice_id, 
+          i.invoice_date,
+          c.admission_id,  
+          a.patient_full_name,
+          a.dni;
+      
+      
+      `
+        ,
+            [invoice_id]
+          );
+
+          console.log(getDataForPayment.rows,invoice_id);
+
+    
+          getDataForPayment.rowCount > 0
+          ? res.status(200).json({
+              message:`Data payment success`,
+              data: getDataForPayment.rows,
+            })
+          : res.status(404).json({ message: "Couldn't find data for payment" });
+      } catch (error) {
+        // Return error response
+        return res
+          .status(500)
+          .json({ message: "Error finding payment data", error: error.message });
+      }
+
+
+}
 
 
 
