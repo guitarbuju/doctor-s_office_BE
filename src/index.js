@@ -15,6 +15,7 @@ import discountRouter from "./api/Routes/payments.routes/discounts/discounts.rou
 import paymentRouter from "./api/Routes/payments.routes/creditCards/creditCards.routes.js";
 import authorizationRouter from "./api/Routes/auth.routes/authorization.routes.js";
 import medicalChartRouter from "./api/Routes/medicalChart.routes/medicalChart.routes.js";
+import medicinesRouter from "./api/Routes/medicine.routes/medicines.Routes.js";
 
 
 
@@ -36,6 +37,7 @@ app.use(discountRouter);
 app.use(paymentRouter);
 app.use(authorizationRouter);
 app.use(medicalChartRouter);
+app.use(medicinesRouter);
 
 const PORT = process.env.PORT;
 
