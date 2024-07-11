@@ -91,6 +91,31 @@ export const getAllRecipeLinesByAdmission = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+export const getChartAndRecipeByAdmission = async (req, res) => {
+  const { id } = req.params;
+  const fixedAdmission_Id = parseInt(id);
+
+  try {
+    const recipeLinesQuery = await pool.query(
+      `SELECT medicalchart.*, recipe.*
+       FROM medicalchart
+       JOIN recipe ON medicalchart.admission_id = recipe.admission_id
+       WHERE medicalchart.admission_id = $1`,
+      [fixedAdmission_Id]
+    );
+
+    recipeLinesQuery.rows.length >= 1
+      ? res.status(200).json({
+          message: "Full Visit Chart retrieved Successfully",
+          data: recipeLinesQuery.rows,
+        })
+      : res.status(404).json({ message: "Couldn't get Full Visit Chart" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 
 
 export const deleteRecipeLineById = async (req, res) => {
