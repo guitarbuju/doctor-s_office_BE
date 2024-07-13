@@ -93,14 +93,15 @@ export const getAllRecipeLinesByAdmission = async (req, res) => {
 };
 export const getChartAndRecipeByAdmission = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const fixedAdmission_Id = parseInt(id);
 
   try {
     const recipeLinesQuery = await pool.query(
-      `SELECT medicalchart.*, recipe.*
-       FROM medicalchart
-       JOIN recipe ON medicalchart.admission_id = recipe.admission_id
-       WHERE medicalchart.admission_id = $1`,
+      `SELECT medicalevents.*, recipe.*
+       FROM medicalevents
+       JOIN recipe ON medicalevents.admission_id = recipe.admission_id
+       WHERE medicalevents.admission_id = $1`,
       [fixedAdmission_Id]
     );
 
