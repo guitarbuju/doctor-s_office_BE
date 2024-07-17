@@ -5,7 +5,7 @@ const admissionRouter = express.Router();
 
 admissionRouter.get('/admissions', getAllAdmissions)
 admissionRouter.get('/admissions/pending', getPendingAdmissions)
-admissionRouter.get('/admissions/pending/:contact_dni', getPendingAdmissionsByDr)
+admissionRouter.get('/admissions/pending/:dni_and_status', getPendingAdmissionsByDr)
 admissionRouter.post('/admissions/:id', createAdmission)
 
 export default admissionRouter;
