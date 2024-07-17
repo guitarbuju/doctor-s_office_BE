@@ -15,7 +15,7 @@ export const getAllAdmissions = async (req, res) => {
 export const getPendingAdmissions = async (req, res) => {
   try {
     const response = await pool.query(
-      "SELECT * FROM admissions where completed = false"
+      "SELECT * FROM admissions where completed = true AND billed = false"
     );
 
     response.rowCount > 0
@@ -27,17 +27,17 @@ export const getPendingAdmissions = async (req, res) => {
 };
 
 export const getPendingAdmissionsByDr = async (req, res) => {
-  const { contact_dni } = req.params;
-  console.log(contact_dni);
+  const { contact_dni,completed } = req.query;
+  console.log(contact_dni,completed);
   try {
     const response = await pool.query(
       `SELECT a.*, p.contact_dni
 FROM admissions a
 JOIN appointments ap ON a.appointment_id = ap.id
 JOIN partnershipHub p ON ap.contact_dni = p.contact_dni
-WHERE a.completed = false AND p.contact_dni = $1;
+WHERE a.completed = $1 AND p.contact_dni = $2;
 `,
-      [contact_dni]
+      [completed,contact_dni]
     );
 
     response.rowCount > 0

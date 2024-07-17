@@ -11,7 +11,7 @@ export const postMedicalChartData = async (req, res) => {
     );
 
     const changeStatus = await pool.query(
-      `UPDATE admissions SET completed = TRUE WHERE id = $1 `,
+      "UPDATE admissions SET completed = true WHERE id = $1 AND completed = false",
       [admission_id]
     );
     const sendBack = await pool.query(

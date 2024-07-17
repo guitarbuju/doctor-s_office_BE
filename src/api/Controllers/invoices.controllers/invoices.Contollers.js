@@ -17,6 +17,12 @@ export const invoiceMaker = async (req, res) => {
          WHERE id = $1`,
       [id]
     );
+    const admissionToInvoice = await pool.query(
+      `UPDATE admissions
+         SET billed = true
+         WHERE id = $1`,
+      [id]
+    );
 
     const sendBack = await pool.query(
       `SELECT 
