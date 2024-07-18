@@ -41,7 +41,7 @@ WHERE a.completed = $1 AND p.contact_dni = $2;
     );
 
     response.rowCount > 0
-      ? res.status(200).json({ message: "Correct Query", data: response.rows })
+      ? res.status(200).json({ message: "Correct Query", data: response.rows ,rowCount: response.rowCount})
       : res.status(404).json({ message: "No Data Found" });
   } catch (error) {
     res.status(500).json({ message: "error retrieving data" });
@@ -59,14 +59,15 @@ export const createAdmission = async (req, res) => {
       id,
     ]);
 
-    const queryText = `INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created, dni)
+    const queryText = `INSERT INTO admissions (appointment_date, completed, appointment_id, doctor_full_name, patient_full_name, date_created, dni,billed)
     SELECT appointment_date, 
        false AS completed, 
        a.id AS appointment_id, 
        title AS doctor_full_name, 
        CONCAT(p1.first_name, ' ', p1.last_name) AS patient_full_name, 
        CURRENT_TIMESTAMP AS date_created, 
-       patient_dni
+       patient_dni,
+       false AS billed
 FROM appointments AS a
 JOIN partnershipHub AS p ON a.contact_dni = p.contact_dni
 JOIN patients AS p1 ON a.patient_dni = p1.dni

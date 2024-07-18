@@ -9,17 +9,17 @@ const SECRET_KEY= process.env.JWT_SECRET;
 
 export const register = async (req, res) => {
  
-    const { username, email, password, dni, partner_type} = req.body;
+    const { username, email, password, partner_type, id} = req.body;
  
   try {
-    console.log(username, email, password, dni, partner_type);
+    console.log(username, email, password, partner_type, id);
 
         const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userCheck.length >0) {res.status(400).json({message:"email already exists in DB"})}
 
         const hashedPassword = await bcrypt.hash(password, 10);
   
-        await pool.query('INSERT INTO users (username, email, password, dni, partner_type) VALUES ($1, $2, $3,$4, $5)', [username, email, hashedPassword, dni, partner_type]);
+        await pool.query('INSERT INTO users (username, email, password, partner_type, id) VALUES ($1, $2, $3,$4,$5)', [username, email, hashedPassword, partner_type, id]);
 
         res.status(201).json({ message: 'User registered successfully' });
       } catch (error) {
