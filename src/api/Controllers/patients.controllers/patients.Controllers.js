@@ -1,10 +1,17 @@
 
 import pool from "../../../DB/connection.js";
 
-export const getAllPatients = async (req, res) => {
-  const response = await pool.query("SELECT * FROM patients");
 
-  res.status(200).json({ message: "success", data: response.rows });
+export const getAllPatients = async (req, res) => {
+  try {
+    console.log("Fetching all patients...");
+    const response = await pool.query("SELECT * FROM patients"); // Ensure the table name matches exactly
+    console.log("Fetched patients:", response.rows);
+    res.status(200).json({ message: "success", data: response.rows });
+  } catch (err) {
+    console.error("Error fetching patients:", err);
+    res.status(500).json({ message: "Error fetching patients" });
+  }
 };
 
 export const getPatientByDni = async (req, res) => {
