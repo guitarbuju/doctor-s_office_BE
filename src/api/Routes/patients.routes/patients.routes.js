@@ -1,5 +1,5 @@
 import express from "express";
-import {pool} from "../../../DB/connection.js"
+import pool from "../../../DB/connection.js"
 
 const patientsRouter = express.Router();
 
