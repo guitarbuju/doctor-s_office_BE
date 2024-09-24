@@ -10,10 +10,10 @@ import {
   updatePatientById
 } from "../../Controllers/patients.controllers/patients.Controllers.js";
 
-router.get("/patients", getAllPatients);
-router.post("/patients", createPatient);
-router.get("/patients/:dni", getPatientByDni);
-router.delete("/patients/delete/:dni", deletePatientByDni);
-router.put("/patients/update/:dni", updatePatientById)
+patientsRouter.get("/patients", getAllPatients);
+patientsRouter.post("/patients", createPatient);
+patientsRouter.get("/patients/:dni", getPatientByDni);
+patientsRouter.delete("/patients/delete/:dni", deletePatientByDni);
+patientsRouter.put("/patients/update/:dni", updatePatientById)
 
 export default patientsRouter;
