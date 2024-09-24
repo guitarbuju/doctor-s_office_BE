@@ -45,7 +45,7 @@ app.get('/',(req,res)=>{
   res.send('Welcome to the Doctor’s Office API!');
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.SERVERPORT || 4000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
