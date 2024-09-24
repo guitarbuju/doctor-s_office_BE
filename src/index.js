@@ -42,23 +42,11 @@ app.use(medicinesRouter);
 
 //API deploy trial
 
-// app.get('/',(req,res)=>{
-//   res.send('Welcome to the Doctor’s Office API!');
-// });
+app.get('/',(req,res)=>{
+  res.send('Welcome to the Doctor’s Office API!');
+});
 
-const getAllPatients = async (req, res) => {
-  try {
-    console.log("Fetching all patients...");
-    const response = await pool.query("SELECT * FROM patients"); // Ensure the table name matches exactly
-    console.log("Fetched patients:", response.rows);
-    res.status(200).json({ message: "success", data: response.rows });
-  } catch (err) {
-    console.error("Error fetching patients:", err);
-    res.status(500).json({ message: "Error fetching patients" });
-  }
-};
 
-app.get('/',getAllPatients)
 
 const PORT = process.env.SERVERPORT || 4000;
 
