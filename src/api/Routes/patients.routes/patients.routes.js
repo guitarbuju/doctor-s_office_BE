@@ -1,6 +1,6 @@
 import express from "express";
 
-const router = express.Router();
+const patientsRouter = express.Router();
 
 import {
   getAllPatients,
@@ -16,4 +16,4 @@ router.get("/patients/:dni", getPatientByDni);
 router.delete("/patients/delete/:dni", deletePatientByDni);
 router.put("/patients/update/:dni", updatePatientById)
 
-export default router;
+export default patientsRouter;
