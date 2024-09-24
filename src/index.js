@@ -39,6 +39,12 @@ app.use(authorizationRouter);
 app.use(medicalChartRouter);
 app.use(medicinesRouter);
 
+
+//API deploy trial
+app.get('/',(req,res)=>{
+  res.send('Welcome to the Doctor’s Office API!');
+});
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
