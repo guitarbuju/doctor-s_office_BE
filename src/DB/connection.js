@@ -41,13 +41,4 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }, // SSL for production
 });
 
-// // Test the connection
-// pool.connect((err) => {
-//   if (err) {
-//     console.error("Error connecting to PostgreSQL", err);
-//   } else {
-//     console.log("Connected to PostgreSQL");
-//   }
-// });
-
-// export default pool;
+ export default pool;
