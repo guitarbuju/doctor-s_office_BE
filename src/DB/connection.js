@@ -1,17 +1,17 @@
-import pkg from 'pg';
-const { Pool } = pkg;
-import dotenv from 'dotenv'
+// import pkg from 'pg';
+// const { Pool } = pkg;
+// import dotenv from 'dotenv'
 
-dotenv.config()
+// dotenv.config()
 
- const pool = new Pool({
-  user:'postgres',
-  host: process.env.HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT, 
-});
-export default pool;
+//  const pool = new Pool({
+//   user:'postgres',
+//   host: process.env.HOST,
+//   database: process.env.DB_NAME,
+//   password: process.env.DB_PASSWORD,
+//   port: process.env.DB_PORT, 
+// });
+// export default pool;
 
 
 // import pkg from 'pg';
@@ -28,20 +28,18 @@ export default pool;
 //   port: process.env.Port,
 //   ssl: { rejectUnauthorized: false }, // Ensure SSL connection for production
 // });
+//  export default pool;
 
+import pkg from 'pg';
+const { Pool } = pkg;
+import dotenv from 'dotenv';
 
-// export default pool;
+dotenv.config();
 
-// import pkg from 'pg';
-// const { Pool } = pkg;
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// const pool = new Pool({
-//   connectionString: process.env.Internal_Database_URL, // Use the internal URL provided by Render
-//   ssl: { rejectUnauthorized: false }, // SSL for production
-// });
+const pool = new Pool({
+  connectionString: process.env.Internal_Database_URL, // Use the internal URL provided by Render
+  ssl: { rejectUnauthorized: false }, // SSL for production
+});
 
 // // Test the connection
 // pool.connect((err) => {
