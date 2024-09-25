@@ -46,7 +46,12 @@ app.get('/',(req,res)=>{
   res.send('Welcome to the Doctor’s Office API!');
 });
 
+//try new db
 
+app.get('/ping',async(req,res)=>{
+  const result = await pool.query('SELECT NOW()')
+  return res.json(result.rows[0])
+});
 
 const PORT = process.env.SERVERPORT || 4000;
 
