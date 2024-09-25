@@ -51,13 +51,13 @@ app.get('/',(req,res)=>{
 const PORT = process.env.SERVERPORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`)});
+
   
-//   pool.connect((err, client, release) => {
-//     if (err) {
-//       return console.error("Error acquiring client", err.stack);
-//     }
-//     console.log("PostgreSQL DB Connection successful");
-//     release(); 
-//   });
-// });
+  pool.connect((err, client, release) => {
+    if (err) {
+      return console.error("Error acquiring client", err.stack);
+    }
+    console.log("PostgreSQL DB Connection successful");
+    release(); 
+  });
